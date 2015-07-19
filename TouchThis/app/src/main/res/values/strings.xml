@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Blue touch</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_game">game</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_game_activity">Touch blue circle</string>
+    <string name="title_activity_game_over">Game Over</string>
+    <string name="title_activity_highscores">Scores</string>
+    <string name="title_activity_difficulty">Difficulty</string>
+</resources>
