@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -24,13 +25,14 @@ import java.util.Random;
 public class game extends View {
     MediaPlayer mp=MediaPlayer.create(getContext(),R.raw.bubble);
     int speed = 1000;
-    long pressTime = -1, releaseTime=0, duration;
-    //Canvas canvas=new Canvas();
+    long pressTime = -1, duration;
     int score=0,limit=1100,limit2;
+    int width,height;
     float valx, valy, valrx, valry, valox, valoy,valbx,valby;
     float[] x = {150, 400, 650, 900}, y = {150, 400, 650, 900, 1150},rc={};
-    float r;
-    int randx = 1, randy = 1, rx = 0, ry = 0, ox = 3, oy = 2, bx=1,by=4;
+    float r=100;
+    int rint=Math.round(r);
+    int randx = 150, randy = 150, rx = 400, ry = 400, ox = 650, oy = 650, bx=150,by=400;
     Paint cyan = new Paint();
     Paint blue = new Paint();
     Paint bg = new Paint();
@@ -39,6 +41,8 @@ public class game extends View {
     Context con;
     Paint red=new Paint();
     Paint red2=new Paint();
+    Rect rec = new Rect();
+    Rect progress=new Rect();
     int dif;
     public game(Context context,int d) {
         super(context);
@@ -52,53 +56,56 @@ public class game extends View {
         magenta.setColor(Color.MAGENTA);
         cyan.setColor(Color.CYAN);
         black.setColor(Color.YELLOW);
-
+        red.setTextSize(250);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        r = 100;
-        Rect rec = new Rect();
+        width=canvas.getWidth();
+        height=canvas.getHeight();
         rec.set(0, 0, canvas.getWidth(), canvas.getHeight());
-        Rect progress=new Rect();
-        progress.set(10, 10, limit, 30);
+        progress.set(10, 10, limit,30);
         if (rx % 2 == 0) {
             bg.setColor(Color.BLACK);
         } else {
             bg.setColor(Color.WHITE);
         }
-
-
+        Log.d("TAG","inside onDraw");
         canvas.drawRect(rec, bg);
         canvas.drawRect(progress, red2);
-        canvas.drawCircle(x[randx], y[randy], r, cyan);
-        if(dif==1){ canvas.drawCircle(x[rx], y[ry], r, blue); }
+        canvas.drawCircle(randx,randy,r,cyan);
+        if(dif==1){
+            canvas.drawCircle(rx,ry,r,blue);
+            }
         else if(dif==2){
-            canvas.drawCircle(x[rx], y[ry], r, blue);
-            canvas.drawCircle(x[ox], y[oy], r, magenta);
+            canvas.drawCircle(rx,ry,r,blue);
+            canvas.drawCircle(ox,oy,r,magenta);
         }
         else if(dif==3){
-            canvas.drawCircle(x[rx], y[ry], r, blue);
-            canvas.drawCircle(x[ox],y[oy],r,magenta);
-            canvas.drawCircle(x[bx],y[by],r,black);
-        }
-        valx = x[randx];
-        valy = y[randy];
-        if (randx == rx && randy == ry) {
-            ry = randInt(0, 4);
-        }
-        else if(randx==ox && randy==oy){ ox=randInt(0,3); }
-        else if(randx==bx && randy==by){ by=randInt(0,4);}
-        valrx = x[rx];
-        valry = y[ry];
-        valox=x[ox];
-        valoy=y[oy];
-        valbx=x[bx];
-        valby=y[by];
 
-        red.setTextSize(250);
+            canvas.drawCircle(rx,ry,r,blue);
+            canvas.drawCircle(ox,oy,r,magenta);
+            canvas.drawCircle(bx,by,r,black);
+        }
+        //Checking for overlap
+        if(Math.sqrt(Math.pow(randx-rx,2)+Math.pow(randy-ry,2))<2*r){  ry=randInt(100,height-100);}
+        if(Math.sqrt(Math.pow(randx-ox,2)+Math.pow(randy-oy,2))<2*r){  oy=randInt(100,height-100);}
+        if(Math.sqrt(Math.pow(randx-bx,2)+Math.pow(randy-by,2))<2*r){  by=randInt(100,height-100);}
+        if(Math.sqrt(Math.pow(ox-rx,2)+Math.pow(oy-ry,2))<2*r){  oy=randInt(100,height-100);}
+        if(Math.sqrt(Math.pow(bx-rx,2)+Math.pow(by-ry,2))<2*r){  by=randInt(100,height-100);}
+        if(Math.sqrt(Math.pow(ox-bx,2)+Math.pow(oy-by,2))<2*r){  by=randInt(100,height-100);}
+        valx=(float)randx;
+        valy=(float)randy;
+        valrx=(float)rx;
+        valry=(float)ry;
+        valox=(float)ox;
+        valoy=(float)oy;
+        valbx=(float)bx;
+        valby=(float)by;
+
         canvas.drawText(String.valueOf(score), 450, 1500, red);
+
         if(limit>10){
             switch (dif) {
                 case 1:
@@ -128,17 +135,24 @@ public class game extends View {
 
     public static int randInt(int min, int max) {
 
-        // NOTE: Usually this should be a field rather than a method
-        // variable so that it is not re-seeded every call.
         Random rand = new Random();
-
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
         int randomNum = rand.nextInt((max - min) + 1) + min;
 
         return randomNum;
     }
 
+    public void forrand(float a,float b, float cx, float cy) {
+        for (float i = a - r; i < a + r; i++) {
+            if (cx == i) {
+                for (float j = b - r; j < b + r; j++) {
+                    if (cy == j) {
+                        Toast.makeText(con, "Oops! Missed it!", Toast.LENGTH_SHORT).show();
+                        gameover();
+                    }
+                }
+            }
+        }
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float cx = event.getX(), cy = event.getY();
@@ -159,54 +173,40 @@ public class game extends View {
                     if (cy == j) {
                         mp.start();
                         score++;
-                        randx = randInt(0, 3);
-                        randy = randInt(0, 4);
-                        rx = randInt(0, 3);
-                        ry = randInt(0, 4);
-                        ox= randInt(0,3);
-                        oy=randInt(0,4);
-                        bx=randInt(0,3);
-                        by=randInt(0,4);
+                        randx = randInt(100, width-100);
+                        randy = randInt(100,height-100);
+                        rx = randInt(100, width-100);
+                        ry = randInt(100, height-100);
+                        ox= randInt(100,width-100);
+                        oy=randInt(100,height-100);
+                        bx=randInt(100,width-100);
+                        by=randInt(100,height-100);
                         limit=limit2;
                     }
                     }
                     }
                 }
-        for (float i = valrx - r; i < valrx + r; i++) {
-            if (cx == i) {
-                for (float j = valry - r; j < valry + r; j++) {
-                    if (cy == j) {
-                        Toast.makeText(con,"Oops! Missed it!",Toast.LENGTH_SHORT).show();
-                        gameover();
-                    }
-            }
-            }
+        switch(dif){
+            case 1:
+                forrand(valrx,valry,cx,cy);
+                break;
+            case 2:
+                forrand(valrx,valry,cx,cy);
+                forrand(valox,valoy,cx,cy);
+                break;
+            case 3:
+                forrand(valrx,valry,cx,cy);
+                forrand(valox,valoy,cx,cy);
+                forrand(valbx,valby,cx,cy);
+                break;
+
         }
-        for (float i = valox - r; i < valox + r; i++) {
-            if (cx == i) {
-                for (float j = valoy - r; j < valoy + r; j++) {
-                    if (cy == j) {
-                        Toast.makeText(con,"Oops! Missed it!",Toast.LENGTH_SHORT).show();
-                        gameover();
-                    }
-                }
-            }
-        }
-        for (float i = valbx - r; i < valbx + r; i++) {
-            if (cx == i) {
-                for (float j = valby - r; j < valby + r; j++) {
-                    if (cy == j) {
-                        Toast.makeText(con,"Oops! Missed it!",Toast.LENGTH_SHORT).show();
-                        gameover();
-                    }
-                }
-            }
-        }
-            limit2-=5;
+
             return super.onTouchEvent(event);
         }
 
     }
+
 
 
 
