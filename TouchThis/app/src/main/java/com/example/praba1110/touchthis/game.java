@@ -105,16 +105,16 @@ public class game extends View {
                     limit -= 10;
                     break;
                 case 2:
-                    limit -= 18;
+                    limit -= 17;
                     break;
                 case 3:
-                    limit -= 25;
+                    limit -= 21;
                     break;
             }
             invalidate();
             }
 
-        else { Toast.makeText(con,"Keep up with time next time!",Toast.LENGTH_SHORT).show();
+        else { Toast.makeText(con,"Keep up next time!",Toast.LENGTH_SHORT).show();
             gameover();}
 
     }

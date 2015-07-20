@@ -43,7 +43,7 @@ public class SQLhandler extends SQLiteOpenHelper {
         String temp = "";
         List<String> names = new ArrayList<String>();
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT name FROM scores WHERE 1;";
+        String query = "SELECT name FROM scores WHERE 1 ORDER BY points DESC;";
         c = db.rawQuery(query, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -62,7 +62,7 @@ public class SQLhandler extends SQLiteOpenHelper {
         int temp=-1 ;
         List<Integer> points = new ArrayList<Integer>();
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT points FROM scores WHERE 1;";
+        String query = "SELECT points FROM scores WHERE 1 ORDER BY points DESC;";
         c = db.rawQuery(query, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {

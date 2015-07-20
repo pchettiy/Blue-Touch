@@ -74,7 +74,7 @@ public class GameOver extends ActionBarActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent main=new Intent(this,MainActivity.class);
+        Intent main=new Intent(this,Difficulty.class);
         startActivity(main);
     }
 }
