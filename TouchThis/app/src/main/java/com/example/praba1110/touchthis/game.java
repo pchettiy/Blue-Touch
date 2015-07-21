@@ -26,10 +26,10 @@ public class game extends View {
     MediaPlayer mp=MediaPlayer.create(getContext(),R.raw.bubble);
     int speed = 1000;
     long pressTime = -1, duration;
-    int score=0,limit=1100,limit2;
+    int score=0,limit=1200,limit2;
     int width,height;
     float valx, valy, valrx, valry, valox, valoy,valbx,valby;
-    float[] x = {150, 400, 650, 900}, y = {150, 400, 650, 900, 1150},rc={};
+//    float[] x = {150, 400, 650, 900}, y = {150, 400, 650, 900, 1150},rc={};
     float r=100;
     int rint=Math.round(r);
     int randx = 150, randy = 150, rx = 400, ry = 400, ox = 650, oy = 650, bx=150,by=400;
@@ -89,12 +89,12 @@ public class game extends View {
             canvas.drawCircle(bx,by,r,black);
         }
         //Checking for overlap
-        if(Math.sqrt(Math.pow(randx-rx,2)+Math.pow(randy-ry,2))<2*r){  ry=randInt(100,height-100);}
-        if(Math.sqrt(Math.pow(randx-ox,2)+Math.pow(randy-oy,2))<2*r){  oy=randInt(100,height-100);}
-        if(Math.sqrt(Math.pow(randx-bx,2)+Math.pow(randy-by,2))<2*r){  by=randInt(100,height-100);}
-        if(Math.sqrt(Math.pow(ox-rx,2)+Math.pow(oy-ry,2))<2*r){  oy=randInt(100,height-100);}
-        if(Math.sqrt(Math.pow(bx-rx,2)+Math.pow(by-ry,2))<2*r){  by=randInt(100,height-100);}
-        if(Math.sqrt(Math.pow(ox-bx,2)+Math.pow(oy-by,2))<2*r){  by=randInt(100,height-100);}
+        if(Math.sqrt(Math.pow(randx-rx,2)+Math.pow(randy-ry,2))<2*r){  ry=randInt(130,height-100);}
+        if(Math.sqrt(Math.pow(randx-ox,2)+Math.pow(randy-oy,2))<2*r){  ox=randInt(100,width-100);}
+        if(Math.sqrt(Math.pow(randx-bx,2)+Math.pow(randy-by,2))<2*r){  bx=randInt(100,width-100);}
+        if(Math.sqrt(Math.pow(ox-rx,2)+Math.pow(oy-ry,2))<2*r){  oy=randInt(130,height-100);}
+        if(Math.sqrt(Math.pow(bx-rx,2)+Math.pow(by-ry,2))<2*r){  by=randInt(130,height-100);}
+        if(Math.sqrt(Math.pow(ox-bx,2)+Math.pow(oy-by,2))<2*r){  bx=randInt(100,width-100);}
         valx=(float)randx;
         valy=(float)randy;
         valrx=(float)rx;
@@ -109,13 +109,13 @@ public class game extends View {
         if(limit>10){
             switch (dif) {
                 case 1:
-                    limit -= 10;
+                    limit -= 15;
                     break;
                 case 2:
-                    limit -= 17;
+                    limit -= 20;
                     break;
                 case 3:
-                    limit -= 21;
+                    limit -= 25;
                     break;
             }
             invalidate();
@@ -174,13 +174,13 @@ public class game extends View {
                         mp.start();
                         score++;
                         randx = randInt(100, width-100);
-                        randy = randInt(100,height-100);
+                        randy = randInt(130,height-100);
                         rx = randInt(100, width-100);
-                        ry = randInt(100, height-100);
+                        ry = randInt(130, height-100);
                         ox= randInt(100,width-100);
-                        oy=randInt(100,height-100);
+                        oy=randInt(130,height-100);
                         bx=randInt(100,width-100);
-                        by=randInt(100,height-100);
+                        by=randInt(130,height-100);
                         limit=limit2;
                     }
                     }
